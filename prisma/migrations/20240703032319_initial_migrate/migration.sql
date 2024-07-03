@@ -30,7 +30,6 @@ CREATE TABLE "Account" (
 CREATE TABLE "Payments" (
     "id" SERIAL NOT NULL,
     "value" DOUBLE PRECISION NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL,
     "description" TEXT NOT NULL,
     "accountIdOrigin" INTEGER NOT NULL,
     "accountIdDestiny" INTEGER NOT NULL,

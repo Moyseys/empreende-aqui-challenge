@@ -1,23 +1,33 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from 'src/controllers/Users.controller';
+import { JwtModule } from '@nestjs/jwt';
+import AuthController from 'src/controllers/Auth.controller';
 import { PrismaService } from 'src/database/prisma.service';
 import AbstractUserRepository from 'src/repositories/AbstractUserRepository';
 import UserRepository from 'src/repositories/implementation/User.repository';
-import UserService from 'src/services/User.service';
+import AuthService from 'src/services/Auth.service';
 import Hash from 'src/utils/Hash';
 
 @Module({
+  imports: [
+    JwtModule.register({
+      global: true,
+      secret: "Apollo",
+      signOptions: {
+        expiresIn: "1d"
+      }
+    })
+  ],
   controllers: [
-    UsersController
+    AuthController
   ],
   providers: [
-    PrismaService,
+    AuthService,
     Hash,
-    UserService,
     {
       provide: AbstractUserRepository,
       useClass: UserRepository
-    }
+    },
+    PrismaService
   ]
 })
-export default class UserModule{}
+export default class AuthModule{}

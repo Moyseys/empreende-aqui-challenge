@@ -1,5 +1,5 @@
 
-export default abstract class PaymentRepository{
+export default abstract class AbstractPaymentRepository{
   abstract register(idDestiny: number, idOrigin: number, value: number, description: string): Promise<{
     id: number;
     value: number;
@@ -9,6 +9,4 @@ export default abstract class PaymentRepository{
     createdAt: Date;
     updatedAt: Date;
   }>
-
-  protected abstract accountExist(id: number): Promise<boolean>
 }

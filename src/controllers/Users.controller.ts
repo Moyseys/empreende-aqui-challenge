@@ -1,12 +1,12 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Post } from '@nestjs/common';
 import CreateUser from '../dtos/Create-user';
-import UserRepository from '../repositories/UserRepository';
+import UserService from 'src/services/User.service';
 
 
 @Controller("users")
 export class UsersController {
   constructor( 
-    private readonly userRepository: UserRepository
+    private readonly userService: UserService
   ) {}
 
   @Post()
@@ -14,7 +14,7 @@ export class UsersController {
     try {
       const  { name, email, password } = body
 
-      const res = await this.userRepository.create(name, email, password)
+      const res = await this.userService.createUser(name, email, password)
 
       return res
     } catch (error) {

@@ -12,8 +12,4 @@ export default class CreateAccount{
   @IsNotEmpty()
   @IsPositive()
     balance: number
-  
-  @IsNotEmpty()
-  @IsPositive()
-    userId: number
 }

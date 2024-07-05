@@ -18,11 +18,16 @@ export default class ImagePaymentController {
     try {
       const { originalname, buffer, mimetype } = img    
 
-      const imagePayment = await this.imagePayment.registerImage(originalname, buffer, mimetype, Number(paymentId));
+      const imagePayment = await this.imagePayment.registerImage(
+        req.userData.userId,
+        originalname,
+        buffer,
+        mimetype,
+        Number(paymentId)
+      );
       return imagePayment
     } catch (error) {
-      if (error as Msg) {
-        console.log(error)      
+      if (error as Msg) {     
         throw new HttpException(error, HttpStatus.BAD_REQUEST)
       } else {
         throw new HttpException("Internal server error!", HttpStatus.INTERNAL_SERVER_ERROR)

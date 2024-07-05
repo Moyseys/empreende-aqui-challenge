@@ -10,7 +10,7 @@ export class ImagePaymentService {
     private readonly payment: AbstractPaymentRepository
   ) { }
 
-  async registerImage(originalname: string, buffer: Buffer, mimetype: string, paymentId: number) {
+  async registerImage(userId: number, originalname: string, buffer: Buffer, mimetype: string, paymentId: number) {
     try {
       const payment = await this.payment.findById(paymentId)
       if (!payment) {
@@ -20,9 +20,18 @@ export class ImagePaymentService {
           statusCode: 400
         }     
         throw error
+      }   
+      if (payment.userId !== userId) {
+        const error = {
+          message: "Only allowed to add images to your payments",
+          error: "IdPayment invalid",
+          statusCode: 400
+        }     
+        throw error
       }
 
-      const newFileName = crypto.randomUUID() + '-' +  originalname
+      const newFileName = crypto.randomUUID() + '-' + originalname
+      
       const url = await uploadToS3(buffer, newFileName, mimetype);
     
       const imagePayment = await this.imagePayment.register(url, paymentId, newFileName);

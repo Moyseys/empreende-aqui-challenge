@@ -22,7 +22,8 @@ model Users {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  account Account[]
+  account  Account[]
+  payments Payments[] @relation("user")
 }
 
 enum AccountType {
@@ -46,18 +47,20 @@ model Account {
 }
 
 model Payments {
-  id          Int      @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   value       Float
   description String
 
   accountIdOrigin  Int
   accountIdDestiny Int
+  userId           Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   accountOrigin  Account         @relation("paymentOrigin", fields: [accountIdOrigin], references: [id])
   accountDestiny Account         @relation("paymentDestiny", fields: [accountIdDestiny], references: [id])
+  user           Users           @relation("user", fields: [userId], references: [id])
   imagePayment   ImagesPayments?
 }
 

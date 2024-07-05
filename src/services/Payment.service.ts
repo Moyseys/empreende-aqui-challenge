@@ -10,7 +10,7 @@ export default class PaymentService{
     private readonly accountRepository: AbstractAccountRepository
   ) { }
   
-  async register(idDestiny: number, idOrigin: number, value: number, description: string): Promise<{
+  async register(userId: number, idDestiny: number, idOrigin: number, value: number, description: string): Promise<{
     id: number;
     value: number;
     description: string;
@@ -20,10 +20,9 @@ export default class PaymentService{
     updatedAt: Date;
   }> {
     try {
-      const accountDestiny = await this.accountRepository.findById(idDestiny);    
-      if (!accountDestiny) {
+      if (idDestiny === idOrigin) {
         const error = {
-          message: "There is no account with this id (destination)",
+          message: "The destination account may not be the same as the logged in user",
           error: "Invalid account",
           statusCode: 400
         };
@@ -33,7 +32,25 @@ export default class PaymentService{
       const accountOrigin = await this.accountRepository.findById(idOrigin);
       if (!accountOrigin) {
         const error = {
-          message: "There is no account with this id (origin)",
+          message: "There is no account with this id(origin)",
+          error: "Invalid account",
+          statusCode: 400
+        };
+        throw error;
+      }
+      if (accountOrigin.userId !== userId) {
+        const error = {
+          message: "The originating account must be that of the logged in user",
+          error: "Invalid account origin",
+          statusCode: 400
+        };
+        throw error;
+      }
+
+      const accountDestiny = await this.accountRepository.findById(idDestiny);    
+      if (!accountDestiny) {
+        const error = {
+          message: "There is no account with this id (destination)",
           error: "Invalid account",
           statusCode: 400
         };
@@ -54,7 +71,7 @@ export default class PaymentService{
       
       if (accountOriginNewBalance < 0) {
         const error = {
-          message: `The user with id ${idOrigin} don't have enough balance to register this payment`,
+          message: `The account with id ${idOrigin} don't have enough balance to register this payment`,
           error: "Invalid balance",
           statusCode: 400
         };
@@ -65,6 +82,7 @@ export default class PaymentService{
       await this.accountRepository.updateBalance(idOrigin, accountOriginNewBalance)
 
       const payment = await this.paymentRepository.register(
+        userId,
         idDestiny,
         idOrigin,
         value,
@@ -72,6 +90,22 @@ export default class PaymentService{
       )
 
       return payment
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async report(userId: number, startDate: Date, finalDate: Date) {
+    try {
+      const payments = await this.paymentRepository.report(userId, startDate, finalDate)
+      const sum = payments.reduce((ac, payment) => { 
+        return ac + payment.value
+      }, 0)
+
+      return {
+        payments,
+        totalSum: sum
+      }
     } catch (error) {
       throw error
     }

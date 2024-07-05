@@ -13,10 +13,10 @@ export default class {
   @Post()
   async create(@Body() body: CreatePayment, @Req() req: RequestWithUserData) {
     try { 
-      const { idDestiny, value, description } = body
-      const idOrigin = req.userData.userId
-
-      await this.paymentService.register(idDestiny, idOrigin, value, description)
+      const { idOrigin, idDestiny, value, description } = body
+      const { userId } = req.userData
+      
+      await this.paymentService.register(userId, idDestiny, idOrigin, value, description)
       return true
     } catch (error) {
       if (error as Msg) {

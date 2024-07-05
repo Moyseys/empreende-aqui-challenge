@@ -4,10 +4,10 @@ import path from 'path'
 
 // Configuração do cliente S3
 const s3Config = new S3Client({
-  region: process.env.REGION,
+  region: process.env.S3_REGION,
   credentials: {
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
   },
 })
 
@@ -35,8 +35,8 @@ const upload = multer({
 })
 
 const uploadToS3 = async (buffer: Buffer, fileName: string, mimeType: string) => {
-  const bucketName = process.env.BUCKET
-  const region = process.env.REGION
+  const bucketName = process.env.S3_BUCKET
+  const region = process.env.S3_REGION
 
   const params: PutObjectCommandInput = {
     Bucket: bucketName,
@@ -45,15 +45,12 @@ const uploadToS3 = async (buffer: Buffer, fileName: string, mimeType: string) =>
     ContentType: mimeType,
     ACL: 'private',
   }
-
   try {
     const data = await s3Config.send(new PutObjectCommand(params))
-    console.log(`Arquivo ${fileName} enviado com sucesso para o S3.`)
-    
+
     const url = `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`
     return url
-  } catch (error) {
-    console.error('Erro ao enviar arquivo para o S3:', error)
+  } catch (error) { 
     throw new Error('Erro ao enviar arquivo para o S3')
   }
 }

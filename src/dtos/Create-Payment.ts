@@ -5,6 +5,10 @@ export default class CreatePayment{
   @IsNotEmpty()
   idDestiny: number
   
+  @IsPositive()
+  @IsNotEmpty()
+  idOrigin: number
+
   @IsNotEmpty()
   @IsPositive()
     value: number

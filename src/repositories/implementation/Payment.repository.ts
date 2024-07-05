@@ -9,18 +9,11 @@ export default class PaymentRepository extends AbstractPaymentRepository{
     super()
   }
   
-  async register(idDestiny: number, idOrigin: number, value: number, description: string): Promise<{
-    id: number;
-    value: number;
-    description: string;
-    accountIdOrigin: number;
-    accountIdDestiny: number;
-    createdAt: Date;
-    updatedAt: Date;
-  }> {
+  async register(userId: number, idDestiny: number, idOrigin: number, value: number, description: string){
     try {
       const payment = await this.prisma.payments.create({
         data: {
+          userId: userId,
           accountIdDestiny: idDestiny,
           accountIdOrigin: idOrigin,
           value: value,
@@ -48,4 +41,23 @@ export default class PaymentRepository extends AbstractPaymentRepository{
       throw error
     }
   }
+
+  async report(userId: number, startDate: Date, finalDate: Date){
+    try {
+      const payments = await this.prisma.payments.findMany({
+        where: {
+          userId: userId,
+          createdAt: {
+            gte: startDate,
+            lte: finalDate
+          }
+        }
+      })  
+
+      return payments
+    } catch (error) {
+      throw error
+    }
+  }
+  
 }

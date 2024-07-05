@@ -7,13 +7,15 @@ import PaymentService from 'src/services/Payment.service';
 import AccountModel from './account.module';
 import AbstractAccountRepository from 'src/repositories/AbstractAccountRepository';
 import { AccountRepository } from 'src/repositories/implementation/Account.repository';
+import ReportController from 'src/controllers/Report.controller';
 
 @Module({
   imports: [
     AccountModel
   ],
   controllers: [
-    PaymentsController
+    PaymentsController,
+    ReportController
   ],
   providers: [
     PaymentService,

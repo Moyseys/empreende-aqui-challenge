@@ -33,6 +33,7 @@ CREATE TABLE "Payments" (
     "description" TEXT NOT NULL,
     "accountIdOrigin" INTEGER NOT NULL,
     "accountIdDestiny" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -65,6 +66,9 @@ ALTER TABLE "Payments" ADD CONSTRAINT "Payments_accountIdOrigin_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "Payments" ADD CONSTRAINT "Payments_accountIdDestiny_fkey" FOREIGN KEY ("accountIdDestiny") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Payments" ADD CONSTRAINT "Payments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ImagesPayments" ADD CONSTRAINT "ImagesPayments_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "Payments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -26,8 +26,7 @@ export default class UserService{
           statusCode: 400
         }     
         throw error
-      }
-
+      }    
       const hashedPassword = await this.hash.hashPass(password)
       const user = await this.userRepository.create(name, email, hashedPassword)
 

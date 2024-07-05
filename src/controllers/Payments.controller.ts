@@ -12,7 +12,7 @@ export default class {
 
   @Post()
   async create(@Body() body: CreatePayment, @Req() req: RequestWithUserData) {
-    try {
+    try { 
       const { idDestiny, value, description } = body
       const idOrigin = req.userData.userId
 

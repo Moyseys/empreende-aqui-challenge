@@ -9,4 +9,14 @@ export default abstract class AbstractPaymentRepository{
     createdAt: Date;
     updatedAt: Date;
   }>
+
+  abstract findById(id: number): Promise<{
+    id: number;
+    value: number;
+    description: string;
+    accountIdOrigin: number;
+    accountIdDestiny: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }>
 }

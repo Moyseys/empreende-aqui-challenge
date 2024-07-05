@@ -34,4 +34,18 @@ export default class PaymentRepository extends AbstractPaymentRepository{
       throw error
     }
   }
+
+  async findById(id: number) {
+    try {
+      const payments = await this.prisma.payments.findUnique({
+        where: {
+          id: id
+        }
+      })  
+
+      return payments
+    } catch (error) {
+      throw error
+    }
+  }
 }

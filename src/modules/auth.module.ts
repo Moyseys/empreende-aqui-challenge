@@ -11,9 +11,9 @@ import Hash from 'src/utils/Hash';
   imports: [
     JwtModule.register({
       global: true,
-      secret: "Apollo",
+      secret: process.env.TOKEN_SECRET,
       signOptions: {
-        expiresIn: "1d"
+        expiresIn: process.env.TOKEN_EXPIRESIN
       }
     })
   ],
